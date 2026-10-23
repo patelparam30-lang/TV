@@ -34,3 +34,55 @@ operation or establish boot eligibility. A successful result does not establish
 that the reference apply/restore helper supports the new model. Review those
 details and prepare an exact-value recovery snapshot before any native writes.
 The reference `run.py` and `Control.cs` guards remain unchanged.
+
+## Owner-specific helper and recovery bundle
+
+After reviewing a complete inspection, use `personal-home.py prepare` on the
+owner's computer with `--host`, `--app-id`, and `--inspection` pointing to the saved
+report. `--download-sdk` permits downloading Microsoft's SHA-512-verified .NET
+6.0.428 build SDK into the private recovery folder (Apple Silicon macOS or Linux
+x64). No system-wide SDK installation or signing credentials are needed. This
+compiler targets the TV's observed .NET 6 runtime. The source project is
+`PersonalControl.csproj`; compilation and runtime outputs stay private.
+
+Prepare stages and runs a **read-only** native query. The helper requires the
+inspected firmware/model pair, 32-bit SDK UID 901, a registered target app and
+native boot eligibility. It reads the actual main Home operation and all five
+typed preferences. Prepare compares these preferences with the earlier
+inspection before exclusively creating `original.json`. Existing originals are
+never replaced. It saves the source, compiled helper, owner configuration and
+SHA-256 integrity manifest under `~/ParamHome-recovery`, and creates a separate
+sibling recovery backup. Neither prepare nor query changes Home/startup.
+
+After reviewing the original snapshot and verifying visible Samsung Home access,
+the copied recovery runner supports:
+
+```sh
+python3 "$HOME/ParamHome-recovery/personal-home.py" query
+python3 "$HOME/ParamHome-recovery/personal-home.py" apply
+python3 "$HOME/ParamHome-recovery/personal-home.py" restore
+```
+
+Apply requires the exact original native assignment and typed settings. It sets
+the native Home operation and `home_appid` to the owner's target and enables Home
+autostart. It preserves first-screen type and reports the firmware's derived
+startup/backup fields without assuming that a readback proves startup behaviour.
+Every explicit write is read back. Failure attempts an exact-value restore and
+reports restore failure separately. Explicit restore verifies all original
+values, does not require the target launcher to remain installed or boot eligible,
+and still enforces the firmware/model and SDK-user guards. A changed Home
+assignment outside the original/custom pair stops writes for review.
+
+All operations re-stage their dependencies under unique temporary filenames;
+restore does not depend on previous device temporary files. Before writes, the
+runner checks the complete local recovery manifest. `--host` and `--sdb` can
+override changed network/tool paths without modifying saved originals. If an
+apply result is incomplete, stop and query; do not apply repeatedly. No command
+automatically restarts the TV, launches an app, or performs a restore/reapply
+cycle. Confirm physical Home after each intentional transition and test normal
+power-on separately. Keep both recovery folders outside the downloaded source
+tree, and preserve them before updates or removal.
+
+Offline checks: `python3 scripts/check-personal-home.py`. These test inspection
+parsing, immutable baselines, bundle integrity and loopback callback handling;
+they do not establish physical-TV compatibility or power-on behaviour.
