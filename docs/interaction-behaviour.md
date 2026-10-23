@@ -2,7 +2,7 @@
 
 ## Home
 
-- Dock: Left/Right scrolls the apps without wrapping. Up enters the top-right controls, starting with Art Mode or the last selected control. Left/Right moves between Art Mode, All apps and Settings. Down or Back returns to the selected app. The clock is at the top left.
+- Dock: Left/Right scrolls the apps without wrapping. Up enters the controls below the weather card, starting with All apps or the last selected control. Left/Right moves between controls. Down or Back returns to the selected app. The clock and date are at the top left. Art Mode is off by default: Samsung also installs its ArtApp component on non-Frame models. A separately verified Frame setup can opt in with `window.CleanFrameDeviceOptions.artMode = true` before discovery; the control also requires an installed `org.tizen.art-app`.
 - List: Up/Down scrolls the apps without wrapping. Right enters the bottom-right controls, aligned with the clock above. Up/Down moves between Art Mode, All apps and Settings. Left or Back returns to the selected app. The list fades at both ends as it scrolls.
 - OK opens the selected item. Focus alone never launches an app.
 - Icons-only apps and controls reveal their names when focused. App presentation and control presentation are independent.
@@ -12,7 +12,7 @@
 
 ## Settings and appearance
 
-Settings opens a grouped overview: Background, Layout, Typography, Focus, Apps on Home and Samsung. OK opens a group. Appearance groups use a two-pane screen with visible choices on the left and the committed Home preview on the right.
+Settings opens a grouped overview: Background, Layout, Typography, Focus, Apps on Home, Weather and Samsung. OK opens a group. Appearance groups use a two-pane screen with visible choices on the left and the committed Home preview on the right.
 
 | Group | Choices |
 | --- | --- |
@@ -81,6 +81,12 @@ The native Home operation and startup configuration from 19 October remain separ
 
 ## Clock and rendering
 
-Both layouts show the TV's local time in 12-hour format, without AM/PM or seconds. It updates at the minute boundary and on return to the launcher. No date or clock panel is shown.
+Both layouts show the TV's local time in 12-hour format, without AM/PM or seconds, with the weekday and date. The Dock uses a larger clock and a time-appropriate greeting. These update at the minute boundary and on return to the launcher.
+
+A fresh installation starts with Golden hour, the bundled Geist font, and seven shortcuts: Netflix, YouTube, YouTube TV, Disney+, Prime Video, Apple TV and Spotify. Stremio is available in All apps when installed, but is not pinned by default. YouTube TV and Spotify use the native app IDs confirmed in the user's uploaded TV inventory. Existing app order, appearance and wallpaper preferences are preserved. Inventory presence is separate from successful launches, which still need visible verification on the TV.
+
+The weather card is configured for East Lansing, Michigan, and shows both Fahrenheit and Celsius from the same Celsius forecast. Plain-language conditions and feels-like temperature come from Open-Meteo's WMO weather codes and forecast values, without generated or invented weather claims. The widget requests city-level weather over HTTPS every 15 minutes while visible. It needs no API key or GPS. Forecast attribution and observation age are visible. Data older than one hour is labelled last known; data six hours old is no longer displayed. The clock and app navigation remain available if weather fails.
+
+Settings → Weather hides/shows the card or explicitly refreshes it. Visibility is stored under `cleanframe.weather.v1`, separately from Home preferences; a failed save keeps the previous setting. A validated forecast cache under `cleanframe.weather.cache.v1` provides a labelled fallback offline. Disabling weather or hiding the app cancels pending requests; stale callbacks cannot restore a hidden widget. Browser checks use forecast fixtures, so they do not establish connectivity to the live provider or weather rendering on a physical TV.
 
 Photographic materials and blurred panel backgrounds are generated before packaging and stay aligned with the full-screen image. Photo colour and contrast metadata are also prepared offline. Navigation does not sample image pixels, run an optics engine or apply live backdrop blur. Flat backgrounds use matching light or dark panel colours. Focus feedback uses transforms and opacity; reduced motion removes animated scaling and movement while retaining opacity feedback.

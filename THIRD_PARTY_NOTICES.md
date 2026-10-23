@@ -18,7 +18,7 @@ The public app uses Manrope, Geist and Newsreader. A personal widget containing 
 | --- | --- |
 | Simple Icons service marks | CC0; exact revisions and adaptations in `app/assets/icons/SOURCES.json` and `ADDITIONAL-SOURCES.json`. The CC0 text is retained beside the icons. |
 | Disney+, ABC and SBS marks | [Custom Brand Icons](https://github.com/elax46/custom-brand-icons), MIT. The retained licence is `app/assets/icons/CUSTOM-BRAND-ICONS-LICENSE.txt`. ABC and SBS sources were replaced during the public-source review. Exact revisions, source files and extraction/recolour notes are in `SOURCES.json`. |
-| Art, apps, settings and home outlines | Original CleanFrame drawings, covered by the project's MIT licence. |
+| Art, apps, settings, home and YouTube TV shortcut outlines | Original CleanFrame drawings, covered by the project's MIT licence. The YouTube TV shortcut uses a television/play glyph rather than official logo artwork. |
 
 Brand marks identify services. Their owners retain trademark rights; this project claims no endorsement or affiliation. The older Australian TV icon archive's GPL text is retained for historical provenance only; no current icon uses that archive.
 
@@ -27,6 +27,10 @@ Brand marks identify services. Their owners retain trademark rights; this projec
 The fifteen photo pages were individually checked on 20 October 2026. Each displayed its credited author and free use under the [Unsplash License](https://unsplash.com/license). The [asset source register](docs/asset-sources.md) links every page. Runtime paths are in `app/assets/wallpapers/SOURCES.json`.
 
 Photographers retain their rights. Wallpapers, thumbnails, panel backgrounds and material fields derive from the credited photographs and retain their terms. The Unsplash licence permits copying, modification and distribution subject to its restrictions, including on selling unmodified images and building a competing image service.
+
+## Weather data
+
+The optional East Lansing weather card requests forecasts from [Open-Meteo](https://open-meteo.com/). Open-Meteo provides weather data under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); retain visible attribution and follow the provider's [terms](https://open-meteo.com/en/terms). Celsius/Fahrenheit conversion and plain-language summaries of WMO codes are performed locally. No weather data is bundled as a live observation. Automated browser checks use clearly isolated fixtures.
 
 ## Development dependencies and exports
 

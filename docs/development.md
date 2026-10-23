@@ -39,6 +39,18 @@ The SDK requires a terminal when it prompts for certificate passwords and whethe
 
 The initial custom XML-signature implementation was rejected by the TV. Use the official SDK packager for future builds; the installed test was signed with Tizen CLI 2.5.25.
 
+## Independent unsigned export
+
+For another owner's installation, generate a Samsung TV Web Application with the official SDK first. Keep its identity stable for updates. Copy that project's `config.xml` to ignored `.local/personal-sdk/config.xml`, then run:
+
+```sh
+python3 scripts/export-personal.py --identity .local/personal-sdk/config.xml --target-platform 9.0
+```
+
+Use the platform version reported by that owner's connected TV. This command creates `dist/ParamHome-unsigned.wgt` and an adjacent identity/hash report. It transfers the SDK project's package ID, application ID, widget ID and display name into the generated manifest, and updates the generated device self-filter to match. Some Samsung 9.0 templates still declare generic `tv`/2.3: the exporter accepts those TV identity templates while retaining the launcher's `tv-samsung` profile and the higher of its existing minimum platform and the template minimum. The checked-in manifest, identity checks and reference device scripts are untouched. Existing output is preserved unless `--force` explicitly requests replacement. Public fonts and distribution notices are included; private signing files and native Home helpers are not included.
+
+The exporter refuses the reference owner's identity and SDK profiles newer than the declared target TV. It does not generate an SDK identity, sign, connect, install, or establish compatibility. Sign the resulting widget locally using the owner's Samsung profile and verify the packaged identity before installing. Certificate passwords and private keys stay on the owner's computer.
+
 ## Another checkout or Mac
 
 Install the official [Samsung TV SDK](https://developer.samsung.com/smarttv/develop/getting-started/setting-up-sdk/installing-tv-sdk.html) into `.local/tizen-sdk`, or copy this Mac's local tools when appropriate. To retain in-place app updates, securely transfer the existing author certificate and its password. Keep those credentials local.

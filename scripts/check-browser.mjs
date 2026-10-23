@@ -14,6 +14,7 @@ const CATALOG = IDS.map((id, i) => ({ id, name: NAMES[i], show: true, iconPath: 
   { id: SPOTIFY, name: 'Spotify', show: true, iconPath: '' },
   { id: '5b8c3eb16b.BeamCTVDev', name: 'HBO Max', show: true, iconPath: '' },
   { id: 'nClrkHome1.FrameHome', name: 'CleanFrame', show: true },
+  { id: 'org.tizen.art-app', name: 'Art Mode', show: true },
   { id: 'AbCdEf1234.worker', name: 'Background worker', show: true },
   { id: 'com.samsung.tv.cobalt-yt', name: 'YouTube', show: true }
 ]);
@@ -43,6 +44,7 @@ async function closePage() { if (current) { current.__closing = true; await curr
 
 // Production still calls its unmodified device.js adapter.
 function installHarness({ seed, legacy, mock, catalog, minuteMs, catalogFailure, noFontAPI, storageFailure }) {
+  window.CleanFrameDeviceOptions = { artMode: true }; // Reference Frame fixture only.
   if (!sessionStorage.getItem('__cleanframe_seeded')) {
     if (seed !== undefined) localStorage.setItem('cleanframe.home.v1', typeof seed === 'string' ? seed : JSON.stringify(seed));
     if (legacy !== undefined) localStorage.setItem('cleanframe.shore.v1', typeof legacy === 'string' ? legacy : JSON.stringify(legacy));
@@ -88,6 +90,12 @@ function installHarness({ seed, legacy, mock, catalog, minuteMs, catalogFailure,
 }
 async function page(options = {}) {
   current = await preview.browser.newPage({ viewport: { width: 1920, height: 1080 } });
+  // Forecasts are deterministic here; UI/navigation tests do not rely on a live service.
+  await current.route('https://api.open-meteo.com/**', route => route.fulfill({ json: {
+    current_units: { temperature_2m: '°C' },
+    current: { time: Math.floor(Date.now() / 1000), temperature_2m: 20, apparent_temperature: 18, weather_code: 2, is_day: 1 },
+    daily: { time: [Math.floor(Date.now() / 1000) - 3600], temperature_2m_max: [23], temperature_2m_min: [12], precipitation_probability_max: [20] }
+  } }));
   const owner = current;
   current.setDefaultTimeout(10000);
   const expected = [];

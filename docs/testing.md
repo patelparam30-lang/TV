@@ -22,6 +22,16 @@ PLAYWRIGHT_BROWSERS_PATH="$PWD/.local/playwright" npm run check:browser
 
 For manual review, use `npm run dev` and open `/home/`. Use the arrow keys, Enter and Escape. Check the changed flow in List and Dock, on Photo, Light and Dark backgrounds. Check a single app and all nine apps when changing app layout. In Settings, browse without applying, apply with OK, return with both Back routes, and cancel a pending resource load. Check editor placement/undo, wallpaper rotation pausing during panels/background time, and restored focus on return when those flows change. Browser preferences are separate from TV preferences.
 
+## Personal Home and weather checks
+
+Run `node scripts/check-home-widgets.mjs` for fresh defaults, East Lansing forecast conversion and natural text, offline/invalid responses, stale cache expiration, visibility persistence and storage failures, cancellation, remote focus, and layout boundaries at 1080p and 720p. Reports and screenshots are in ignored `.local/qa/widgets/`. Both browser suites intercept the forecast endpoint with fixtures; they never substitute fixture data in the runtime app.
+
+Set `CLEANFRAME_CHROMIUM_EXECUTABLE` to an existing system Chromium executable when needed (for example `/usr/bin/chromium` in the prepared cloud environment). Otherwise the tools use Playwright's installed Chromium. On a machine with network access, separately verify that the runtime can fetch `https://api.open-meteo.com` and that its temperatures match the provider response. The cloud proxy denied this destination during implementation; browser fixtures do not clear that limitation.
+
+## Personal export checks
+
+Run `python3 scripts/check-personal-export.py` before changing independent packaging. These tests use temporary fixture identities to verify manifest/self-filter agreement, unchanged checked-in sources, public fonts, preserved runtime assets, output overwrite protection, and rejection of reference identities, non-TV profiles and incompatible platform versions. Fixture identities are not personal installation identities or SDK validation evidence.
+
 ## Physical TV checks
 
 Run these only under a task that includes TV testing. Announce any installation or launch first, then follow `development.md`. SDK success alone is not a visible result. Ask Nathan to confirm the normal remote behaviour and record the version, firmware, result and any open checks in `tv-status.md`.

@@ -1,5 +1,11 @@
 [
   {
+    "icon": "youtubetv",
+    "source": "Original CleanFrame television-outline and play-triangle drawing",
+    "licence": "MIT",
+    "note": "Service-labelled shortcut glyph; not official YouTube TV logo artwork."
+  },
+  {
     "icon": "spotify",
     "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/spotify.svg",
     "licence": "CC0-1.0",
